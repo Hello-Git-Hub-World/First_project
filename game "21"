@@ -1,0 +1,146 @@
+from random import randint
+import sys
+
+# print("Приветствую тебя, мой друг, на увлекательной игре под названием 'Двадцать одно'.\nДанная игра была создана Иваном и представляет его первый проект.\n\
+# Давай я расскажу тебе правила.:\n\
+# Игрок набирает очки, бросая 11-гранный кубик несколько раз с целью получить как можно ближе к 21 очку.\n\
+# Если игрок набирает ровно 21 очко, он автоматически выигрывает игру.\n\
+# Если у игрока больше 21 очка, он 'перебрал' и игру выигрывает дилер. Игрок выбирает, когда хочет остановить бросок кубика.\n\
+# Если игрок не 'перебрал', дилер начинает бросать кубик. Пока у дилера 16 очков или меньше, он будет бросать кубик, чтобы набрать очки.\n\
+# Если у дилера 17 очков или больше, он прекратит бросать кубик.\n\
+# Если у дилера больше 21 очка, он 'перебрал' и игру выигрывает игрок.\n\
+# Если ни игрок, ни дилер не 'перебрали', выигрывает тот, у кого больше очков. При ничьей игра считается ничейной.\n\
+# Ваша задача - реализовать игру в кости '21' в виде текстовой игры в терминале.\n\
+# Игрок должен выбирать, хочет ли он бросать кубик или воздержаться, через ввод. Выбор дилера должен быть сделан автоматически вашей программой.\n\
+# Важно, чтобы ваша программа ясно выводила, кто выиграл игру (или что игра закончилась в ничью).")
+
+# Создаём функцию, отвечаютщая за очки игрока и диллера
+
+def start_game(): # Функиця Старт, начало игры
+    player = 0 # Очки игрока (нас)
+    diller = 0 # Очки диллера (пк)
+    print("Нажмите Enter, чтобы игра началась")
+    a = input() # Реализовываем функцию "Нажмите Enter", введя прросто пустой инпут
+    player = randint(1, 11) # Строка, отвечающая за случайно выпадшее число нам
+    diller = randint(1, 11) # Строка, отвечающая за случайно выпадшее число диллеру
+    play(player, diller)
+    
+
+def play(player_count, diller_count): # Функция игры
+    while True:
+        if player_count == 21:
+            print("-" * 21)
+            print("Вы победили")  
+            print("-" * 21)
+            win_player(player_count, diller_count)
+            break
+        
+        elif player_count > 21:
+            print("-" * 21)    
+            print("Победил диллер")  
+            print("-" * 21)
+            win_diller(diller_count, player_count)
+            
+        else:
+            print(f"У вас: {player_count}")
+            question = input("Бросаем еще раз?\
+                      да - бросить кости\
+                      нет - нет")
+            if question.lower() == "да":
+                player_count += randint(1, 11)
+            elif question.lower() == "нет":
+                while diller_count < 16:
+                    diller_count += randint(1, 11)
+                    if diller_count >= 17:
+                        itog(player_count, diller_count)
+                        break
+            else:
+                pass                      
+                       
+                
+def itog(player, diller): # функция итог, кто выйграл
+    if player > 21:
+        print("-" * 21)
+        print("Перебор, победил диллер")  
+        print("-" * 21)
+        win_diller(diller, player)
+        return
+    if diller > 21:
+        print("-" * 21)
+        print("Вы выйграли!")  
+        print("-" * 21)
+        win_diller(player, diller)
+        return
+        
+    elif player < 21 and diller < 21:
+        if player > diller:
+            print("-" * 21)
+            print("Вы выйграли!")  
+            print("-" * 21)
+            win_player(player, diller)
+            return
+        elif player < diller:
+            print("-" * 21)
+            print("Победил диллер")  
+            print("-" * 21)
+            win_diller(diller, player)
+            return
+        else:
+            print("-" * 21)
+            print("Ничья!")  
+            print("-" * 21) 
+            nobody(player, diller)
+            return
+            
+                               
+def nobody(p_r, d_r): #ничья
+    print("-" * 21)
+    print(f"У диллера {d_r}")           
+    print(f"У вас {p_r}")  
+    print("-" * 21)         
+    question2 = input("Хотите сыграть еще?\
+         да - новая игра\
+         нет - покинуть игру")
+    if question2.lower() == "да":
+        start_game()
+    elif question2.lower() == "нет":
+        sys.exit() 
+    else:
+        print("Напиши 'да' или 'нет' - это все, что от тебя требуется")       
+                  
+                           
+        
+def win_diller(diller_count, player_count): # победа диллера
+    print("-" * 21)
+    print(f"У диллера {diller_count}")           
+    print(f"У вас {player_count}")  
+    print("-" * 21)         
+    question2 = input("Хотите сыграть еще?\
+         да - новая игра\
+         нет - покинуть игру")
+    if question2.lower() == "да":
+        start_game()
+    elif question2.lower() == "нет":
+        sys.exit() 
+    else:
+        print("Напиши 'да' или 'нет' - это все, что от тебя требуется")
+        print("-" * 21)
+        
+        
+
+def win_player(player_count, diller_count): # победа игрока
+    print("-" * 21)
+    print(f"У диллера {diller_count}")           
+    print(f"У вас {player_count}")  
+    print("-" * 21)         
+    question2 = input("Хотите сыграть еще?\
+         да - новая игра\
+         нет - покинуть игру")
+    if question2.lower() == "да":
+        start_game()
+    elif question2.lower() == "нет":
+        sys.exit() 
+    else:
+        print("Напиши 'да' или 'нет' - это все, что от тебя требуется")       
+
+start_game()
